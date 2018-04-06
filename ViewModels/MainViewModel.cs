@@ -3,6 +3,8 @@ using EscapeDBUsage.Helpers;
 using EscapeDBUsage.InteractionRequests;
 using EscapeDBUsage.UIClasses;
 using EscapeDBUsage.UIClasses.OtherViews;
+using log4net;
+using log4net.Repository.Hierarchy;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
@@ -89,7 +91,12 @@ namespace EscapeDBUsage.ViewModels
             {
                 Process process = new Process();
                 // Configure the process using the StartInfo properties.
-                process.StartInfo.FileName = @"c:\!! LOGs\EscapeDBUsage.log";
+                var rootAppender = ((Hierarchy)LogManager.GetRepository())
+                                         .Root.Appenders.OfType<log4net.Appender.FileAppender>()
+                                         .FirstOrDefault();
+
+                string filename = rootAppender != null ? rootAppender.File : string.Empty;
+                process.StartInfo.FileName = rootAppender.File;
                 //process.StartInfo.Arguments = @"c:\!! LOGs\EscapeDBUsage.log";
                 process.StartInfo.WindowStyle = ProcessWindowStyle.Maximized;
                 process.Start();

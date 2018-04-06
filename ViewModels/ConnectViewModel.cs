@@ -31,8 +31,8 @@ namespace EscapeDBUsage.ViewModels
             DbConnection = new DbConnectionUI()
             {
                 IsConnected = false,
-                ServerName = db.ServerName ?? "localhost",
-                Login = db.Login ?? "isp"
+                ServerName = db.ServerName ?? @"localhost\SQLEXPRESS",
+                Login = db.Login ?? "pundera"
             };
 
             Connect = new DelegateCommand(() => DoConnect());

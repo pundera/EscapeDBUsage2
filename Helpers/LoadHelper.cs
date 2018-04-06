@@ -38,7 +38,7 @@ namespace EscapeDBUsage.Helpers
 
         public static bool Load(ref ObservableCollection<UISprint> sprints, IEventAggregator evAgg, MainViewModel viewModel, DatabaseSchemaViewModel dataViewModel)
         {
-            Logger.Logger.log.Info("Loading sprints...");
+            Logger.Logger.Log.Info("Loading sprints...");
 
             var ret = false;
 
@@ -98,15 +98,15 @@ namespace EscapeDBUsage.Helpers
                     }
                 }
                 ret = true;
-                Logger.Logger.log.Info("Loading sprints -> SUCCESS!");
+                Logger.Logger.Log.Info("Loading sprints -> SUCCESS!");
                 return ret;
             }
             catch (Exception ex)
             {
-                Logger.Logger.log.Error("Error loading sprints...", ex);
+                Logger.Logger.Log.Error("Error loading sprints...", ex);
                 ret = false;
 
-                Logger.Logger.log.Info("Creating sprints ...");
+                Logger.Logger.Log.Info("Creating sprints ...");
 
                 try
                 {
@@ -116,13 +116,13 @@ namespace EscapeDBUsage.Helpers
                         s.Write(sss);
                     }
 
-                    Logger.Logger.log.Info("Creating sprints -> SUCCESS!");
+                    Logger.Logger.Log.Info("Creating sprints -> SUCCESS!");
                     // again -> 
                     return Load(ref sprints, evAgg, viewModel, dataViewModel);
                 }
                 catch (Exception ex2)
                 {
-                    Logger.Logger.log.Error("Error creating sprints data file...", ex2);
+                    Logger.Logger.Log.Error("Error creating sprints data file...", ex2);
                 }
 
                 return ret;

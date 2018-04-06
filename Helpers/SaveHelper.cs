@@ -70,7 +70,7 @@ namespace EscapeDBUsage.Helpers
 
         internal static bool SaveSprints(ObservableCollection<UISprint> sprints)
         {
-            Logger.Logger.log.Info("Saving sprints...");
+            Logger.Logger.Log.Info("Saving sprints...");
 
             var ret = false;
 
@@ -136,11 +136,11 @@ namespace EscapeDBUsage.Helpers
                     stream.Write(json);
                 }
                 ret = true;
-                Logger.Logger.log.Info("Saving sprints -> SUCCESS!");
+                Logger.Logger.Log.Info("Saving sprints -> SUCCESS!");
                 return ret;
             } catch (Exception ex)
             {
-                Logger.Logger.log.Error("Error saving sprints...", ex);
+                Logger.Logger.Log.Error("Error saving sprints...", ex);
                 ret = false;
                 return ret;
             }

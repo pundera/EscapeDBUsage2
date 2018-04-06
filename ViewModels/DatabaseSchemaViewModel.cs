@@ -20,12 +20,13 @@ using System.Windows.Threading;
 
 namespace EscapeDBUsage.ViewModels
 {
-    public class DatabaseSchemaViewModel: BindableBase
+    public class DatabaseSchemaViewModel : BindableBase
     {
         public DatabaseSchemaViewModel(IEventAggregator evAgg)
         {
             this.eventAgg = evAgg;
-            eventAgg.GetEvent<SelectedSprintChanged>().Subscribe((sprint) => {
+            eventAgg.GetEvent<SelectedSprintChanged>().Subscribe((sprint) =>
+            {
                 SelectedSprint = sprint;
                 //ExpandAll.Execute(null);
             });
@@ -52,7 +53,7 @@ namespace EscapeDBUsage.ViewModels
                     }
                 });
             });
-            
+
             CheckAll = new DelegateCommand(() =>
             {
                 ThreadPool.QueueUserWorkItem((o) =>
@@ -75,7 +76,8 @@ namespace EscapeDBUsage.ViewModels
                 });
             });
 
-            CollapseAll = new DelegateCommand(() => {
+            CollapseAll = new DelegateCommand(() =>
+            {
                 ThreadPool.QueueUserWorkItem((o) =>
                 {
                     foreach (var t in SelectedSprint.DbSchemaTables)
@@ -91,7 +93,8 @@ namespace EscapeDBUsage.ViewModels
 
             Action expandAllAction = async () =>
             {
-                Dispatcher.CurrentDispatcher.Invoke(new Action (() => {
+                Dispatcher.CurrentDispatcher.Invoke(new Action(() =>
+                {
                     //IsDbSchemaTabVisible = false;
                 }), DispatcherPriority.Normal, null);
 
@@ -108,7 +111,7 @@ namespace EscapeDBUsage.ViewModels
                     }
                 });
                 //.ContinueWith(new Action<Task>((t) => {
-                   
+
                 //}));
 
                 Dispatcher.CurrentDispatcher.Invoke(new Action(() =>
@@ -121,12 +124,19 @@ namespace EscapeDBUsage.ViewModels
             ExpandAll = new DelegateCommand(() =>
             {
                 //VisualChildrenHelper.FreezeAll(VisualChildrenHelper.FindVisualChild<DatabaseSchemaView>(Application.Current.MainWindow));
-                expandAllAction();                
+                expandAllAction();
             });
 
-            EraseSchemaFulltext = new DelegateCommand(() => {
+            EraseSchemaFulltext = new DelegateCommand(() =>
+            {
                 SchemaTableFulltext = null;
                 SchemaColumnFulltext = null;
+            });
+
+            EraseSchemaFulltextExclude = new DelegateCommand(() =>
+            {
+                SchemaTableFulltextExclude = null;
+                SchemaColumnFulltextExclude = null;
             });
         }
 
@@ -146,17 +156,40 @@ namespace EscapeDBUsage.ViewModels
         public string SchemaColumnFulltext
         {
             get { return schemaColumnFulltext; }
-            set { 
+            set
+            {
                 SetProperty(ref schemaColumnFulltext, value);
-            
+
                 if (value == null)
                 {
-                    EraseFulltext(SchemaFultextType.Column);
+                    EraseFulltext();
                 }
                 else
                 {
-                    SchemaTableFulltext = null;
-                    DoFulltext(SchemaFultextType.Column);
+                    if (value.Equals(string.Empty)) SchemaColumnFulltext = null;
+                    DoFulltext();
+                }
+            }
+        }
+
+        private string schemaColumnFulltextExclude;
+        public string SchemaColumnFulltextExclude
+        {
+            get { return schemaColumnFulltextExclude; }
+            set
+            {
+                SetProperty(ref schemaColumnFulltextExclude, value);
+
+                
+
+                if (value == null)
+                {
+                    EraseFulltextExclude();
+                }
+                else
+                {
+                    if (value.Equals(string.Empty)) SchemaColumnFulltextExclude = null;
+                    DoFulltext();
                 }
             }
         }
@@ -178,52 +211,110 @@ namespace EscapeDBUsage.ViewModels
         public ICommand CollapseAll { get; private set; }
         public ICommand ExpandAll { get; private set; }
 
-        private void DoFulltext(SchemaFultextType schemaFultextType)
+        private void DoFulltext()
         {
             foreach (var t in SelectedSprint.DbSchemaTables)
             {
-                if (schemaFultextType == SchemaFultextType.Table)
-                {
-                    if (t.Name.ToUpperInvariant().Contains(SchemaTableFulltext.ToUpperInvariant())) t.IsVisible = true;
-                    else t.IsVisible = false;
-                }
 
-                if (schemaFultextType == SchemaFultextType.Column)
+
+                var inValue = SchemaTableFulltext;
+                var exValue = SchemaTableFulltextExclude;
+
+                CreateIncludesAndExcludes(out string[] includes, out string[] excludes, inValue, exValue);
+                var list = CreateFulltextValueList(includes, excludes);
+
+                var tableName = t.Name.ToUpperInvariant();
+
+                var shouldBeVisible = ShouldBeVisible(list, tableName);
+
+                t.IsVisible = shouldBeVisible;
+
+
+                if (shouldBeVisible && t.Columns != null)
                 {
-                    if (t.Columns != null)
+                    var inValueC = SchemaColumnFulltext;
+                    var exValueC = SchemaColumnFulltextExclude;
+
+                    CreateIncludesAndExcludes(out string[] includesC, out string[] excludesC, inValueC, exValueC);
+                    var listC = CreateFulltextValueList(includesC, excludesC);
+
+                    foreach (var c in t.Columns)
                     {
-                        var b = false;
-                        foreach (var c in t.Columns)
-                        {
-                            if (c.Name.ToUpperInvariant().Contains(SchemaColumnFulltext.ToUpperInvariant()))
-                            {
-                                c.IsVisible = true;
-                                t.IsVisible = true;
-                                b = true;
-                            }
-                            else
-                            {
+                        var columnName = c.Name.ToUpperInvariant();
 
-                                c.IsVisible = false;
-                                //t.IsVisible = false;
-                            }
-                        }
-                        t.IsVisible = b;
+                        var shouldBeVisibleC = ShouldBeVisible(listC, columnName);
+                        c.IsVisible = shouldBeVisibleC;
                     }
                 }
+
             }
         }
 
-        private void EraseFulltext(SchemaFultextType schemaFultextType)
+        private static bool ShouldBeVisible(List<FulltextValue> list,string text)
         {
-            foreach (var t in SelectedSprint.DbSchemaTables)
+            var shouldBeVisible = false;
+            if (list.Count == 0) shouldBeVisible = true;
+
+            foreach (var v in list)
             {
-                t.IsVisible = true;
-                if (t.Columns != null) 
-                    foreach (var c in t.Columns)
-                    {
-                        c.IsVisible = true;
-                    }
+                if (!string.IsNullOrEmpty(v.Value) && v.IsInclude && text.Contains(v.Value)) shouldBeVisible = true;
+            }
+
+            if (shouldBeVisible)
+            {
+                foreach (var v in list)
+                {
+                    if (!string.IsNullOrEmpty(v.Value) && !v.IsInclude && text.Contains(v.Value)) shouldBeVisible = false;
+                }
+            }
+
+            return shouldBeVisible;
+        }
+
+        private void CreateIncludesAndExcludes(out string[] includes, out string[] excludes, string inValue, string exValue)
+        {
+            includes = inValue != null ? inValue.ToUpperInvariant().Split(' ') : new string[] { };
+            excludes = exValue != null ? exValue.ToUpperInvariant().Split(' ') : new string[] { };
+        }
+
+        private static List<FulltextValue> CreateFulltextValueList(string[] includes, string[] excludes)
+        {
+            var valueListIncludes = includes.Select((x) => new FulltextValue() { IsInclude = true, Value = x }).ToList();
+            var valueListExcludes = excludes.Select((x) => new FulltextValue() { IsInclude = false, Value = x }).ToList();
+            var list = valueListIncludes.Concat(valueListExcludes).ToList();
+            return list;
+        }
+
+        private void EraseFulltext()
+        {
+            DoFulltext();
+        }
+
+        private void EraseFulltextExclude()
+        {
+            DoFulltext();
+        }
+
+        //SchemaTableFulltextExclude
+        private string schemaTableFulltextExclude;
+        public string SchemaTableFulltextExclude
+        {
+            get { return schemaTableFulltextExclude; }
+            set
+            {
+                SetProperty(ref schemaTableFulltextExclude, value);
+
+                
+
+                if (value == null)
+                {
+                    EraseFulltextExclude();
+                }
+                else
+                {
+                    if (value.Equals(string.Empty)) SchemaTableFulltextExclude = null;
+                    DoFulltext();
+                }
             }
         }
 
@@ -235,19 +326,21 @@ namespace EscapeDBUsage.ViewModels
             {
                 SetProperty(ref schemaTableFulltext, value);
 
+                
+
                 if (value == null)
                 {
-                    EraseFulltext(SchemaFultextType.Table);
+                    EraseFulltext();
                 }
                 else
                 {
-                    SchemaColumnFulltext = null;
-                    DoFulltext(SchemaFultextType.Table);
+                    if (value.Equals(string.Empty)) SchemaTableFulltext = null;
+                    DoFulltext();
                 }
             }
         }
         public ICommand EraseSchemaFulltext { get; private set; }
-
+        public ICommand EraseSchemaFulltextExclude { get; private set; }
     }
 
     public enum SchemaFultextType

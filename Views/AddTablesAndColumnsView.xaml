@@ -62,7 +62,7 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0" Orientation="Horizontal">
-            <GroupBox Header=" Fulltext ">
+            <GroupBox Header=" Fulltext [INCLUDE]">
                 <StackPanel Orientation="Vertical">
                     <StackPanel Orientation="Horizontal">
                         <Label Width="60" Content="Table:"/>
@@ -74,7 +74,25 @@
                     </StackPanel>
                     <Button Margin="4,0" Command="{Binding ViewModel.EraseSchemaFulltext}" Background="Transparent" >
                         <StackPanel Orientation="Horizontal">
-                            <Label Content="Erase Fulltext Filter" />
+                            <Label Content="Erase" />
+                            <Image Height="24" Source="/EscapeDBUsage;component/Images/erase.png" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header=" Fulltext [EXCLUDE]">
+                <StackPanel Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal">
+                        <Label Width="60" Content="Table:"/>
+                        <TextBox Margin="6,2" Width="110" Text="{Binding ViewModel.SchemaTableFulltextExclude, Delay=300, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Width="60" Content="Column:"/>
+                        <TextBox Margin="6,2" Width="110" Text="{Binding ViewModel.SchemaColumnFulltextExclude, Delay=300, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                    </StackPanel>
+                    <Button Margin="4,0" Command="{Binding ViewModel.EraseSchemaFulltextExclude}" Background="Transparent" >
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Erase" />
                             <Image Height="24" Source="/EscapeDBUsage;component/Images/erase.png" />
                         </StackPanel>
                     </Button>
