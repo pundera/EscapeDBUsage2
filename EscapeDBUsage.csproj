@@ -111,6 +111,7 @@
     <Compile Include="Confirmations\ConnectConfirmation.cs" />
     <Compile Include="Converters\ErrorToColorConverter.cs" />
     <Compile Include="Converters\ImageSourceConverter.cs" />
+    <Compile Include="Converters\PercentageConverter.cs" />
     <Compile Include="Events\ConnectEvent.cs" />
     <Compile Include="Events\SelectedSprintChanged.cs" />
     <Compile Include="Helpers\ConnectionHelper.cs" />
@@ -394,6 +395,10 @@
   <ItemGroup>
     <Resource Include="Images\check-all.png" />
     <Resource Include="Images\uncheck-all.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\zoom-in.png" />
+    <Resource Include="Images\zoom-out.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -17,6 +17,7 @@
             <converters:BoolToVisibilityConverter x:Key="VisibilityConverter" />
             <converters:XxxImageSourceConverter x:Key="ImageFromSourceConverter" />
             <converters:ErrorToColorConverter x:Key="ErrorToColor" />
+            <converters:PercentageConverter x:Key="PercentageConverter" />
 
             <!--Icons-->
             <BitmapImage UriSource="/Images/sprints.png" x:Key="i-sprint" />
@@ -54,8 +55,9 @@
 
 
             <Style BasedOn="{StaticResource ModalWindow}" TargetType="{x:Type Window}" x:Key="AddTablesAndColumnsWindow">
-                <Setter Property="Width" Value="840" />
-                <Setter Property="Height" Value="640" />
+                <Setter Property="Width" Value="1024" />
+                <Setter Property="Height" Value="720" />
+                <Setter Property="ResizeMode" Value="CanResizeWithGrip" />
             </Style>
 
         </ResourceDictionary>

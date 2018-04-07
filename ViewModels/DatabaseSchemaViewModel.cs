@@ -138,6 +138,21 @@ namespace EscapeDBUsage.ViewModels
                 SchemaTableFulltextExclude = null;
                 SchemaColumnFulltextExclude = null;
             });
+
+            ZoomDefault = new DelegateCommand(() => {
+                ZoomFactor = 1;
+            });
+
+
+            ZoomIn = new DelegateCommand(() => {
+                if (zoomFactor * 0.75 >= 0.125) ZoomFactor = zoomFactor * 0.75;
+                else ZoomFactor = 0.125;
+            });
+
+            ZoomOut = new DelegateCommand(() => {
+                if (zoomFactor * 1.25 <= 4) ZoomFactor = zoomFactor * 1.25;
+                else ZoomFactor = 4;
+            });
         }
 
         private bool isDbSchemaTabVisible = true;
@@ -341,6 +356,22 @@ namespace EscapeDBUsage.ViewModels
         }
         public ICommand EraseSchemaFulltext { get; private set; }
         public ICommand EraseSchemaFulltextExclude { get; private set; }
+
+        private double zoomFactor = 1;
+        public double ZoomFactor
+        {
+            get {
+                return zoomFactor;
+            }
+            set
+            {
+                SetProperty(ref zoomFactor, value);
+            }
+        }
+
+        public ICommand ZoomDefault { get; private set; }
+        public ICommand ZoomIn { get; private set; }
+        public ICommand ZoomOut { get; private set; }
     }
 
     public enum SchemaFultextType
