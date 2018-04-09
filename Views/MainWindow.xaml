@@ -107,10 +107,26 @@
                     <ribbon:TextBox Margin="6"  Header="Column:" Width="218" Text="{Binding DatabaseSchemaViewModel.SchemaColumnFulltextExclude, Delay=300, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                     <ribbon:Button Margin="4,0"  Header="Erase" Command="{Binding DatabaseSchemaViewModel.EraseSchemaFulltextExclude}" LargeIcon="{StaticResource i-erase}" Icon="{StaticResource i-erase}" />
                 </ribbon:RibbonGroupBox>
+                <ribbon:RibbonGroupBox Header="Filters">
+                    <ribbon:CheckBox Header="use filters!"/>
+                    <ribbon:CheckBox Margin="10,0,0,0" Header="is Primary Key" />
+                    <ribbon:CheckBox Margin="10,0,0,0" Header="is Nullable" />
+                    <ribbon:CheckBox Margin="10,0,0,0" Header="is Computed" />
+                    <ribbon:CheckBox Margin="10,0,0,0" Header="has Default" />
+                </ribbon:RibbonGroupBox>
                 <ribbon:RibbonGroupBox Header="Tree View Manipulation">
                     <ribbon:Button Header="Expand All" Command="{Binding DatabaseSchemaViewModel.ExpandAll}" LargeIcon="{StaticResource i-schema-expand}" Icon="{StaticResource i-schema-expand}" />
                     <ribbon:Button Header="Collapse All" Command="{Binding DatabaseSchemaViewModel.CollapseAll}" LargeIcon="{StaticResource i-schema-collapse}" Icon="{StaticResource i-schema-collapse}" />
-                </ribbon:RibbonGroupBox>            
+                </ribbon:RibbonGroupBox>
+                <ribbon:RibbonGroupBox Header="Zoom">
+                    <StackPanel Orientation="Horizontal">
+                        <Slider Width="100"  Margin="2,6,2,10" Orientation="Horizontal" Minimum="0.25" Maximum="4.0" LargeChange="0.25" SmallChange="0.1"  Value="{Binding DatabaseSchemaViewModel.ZoomFactor}" />
+                        <Label Width="40" Content="{Binding DatabaseSchemaViewModel.ZoomFactor, Converter={StaticResource PercentageConverter}}"/>
+                    </StackPanel>
+                    <ribbon:Button Header="Zoom In" Command="{Binding DatabaseSchemaViewModel.ZoomIn}" LargeIcon="{StaticResource i-zoom-in}" Icon="{StaticResource i-zoom-in}" />
+                    <ribbon:Button Header="Zoom Out" Command="{Binding DatabaseSchemaViewModel.ZoomOut}" LargeIcon="{StaticResource i-zoom-out}" Icon="{StaticResource i-zoom-out}" />
+                    <ribbon:Button Header="100%" Command="{Binding DatabaseSchemaViewModel.ZoomDefault}" LargeIcon="{StaticResource i-erase}" Icon="{StaticResource i-erase}" />
+                </ribbon:RibbonGroupBox>
             </ribbon:RibbonTabItem>
         </ribbon:Ribbon>
         <ContentControl Grid.Row="1" prism:RegionManager.RegionName="ContentRegion" >

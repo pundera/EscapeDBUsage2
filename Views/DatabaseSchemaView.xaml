@@ -60,6 +60,10 @@
     </UserControl.Resources>
     <Grid>
         <TreeView ItemTemplate="{StaticResource ResourceKey=TreeTemplateDatabaseSchema}" ItemsSource="{Binding SelectedSprint.DbSchemaTables}" Margin="0,0,0,0" >
+            <TreeView.LayoutTransform>
+                <!-- This ScaleTransform implements the zooming and is bound the Value of the ZoomSlider -->
+                <ScaleTransform ScaleX="{Binding ZoomFactor}" ScaleY="{Binding ZoomFactor}" />
+            </TreeView.LayoutTransform>
             <TreeView.Resources>
                 <Style TargetType="{x:Type Border}">
                     <Setter Property="CornerRadius" Value="8" />

@@ -145,13 +145,13 @@ namespace EscapeDBUsage.ViewModels
 
 
             ZoomIn = new DelegateCommand(() => {
-                if (zoomFactor * 0.75 >= 0.125) ZoomFactor = zoomFactor * 0.75;
-                else ZoomFactor = 0.125;
+                if (zoomFactor * 1.25 <= 4) ZoomFactor = zoomFactor * 1.25;
+                else ZoomFactor = 4;
             });
 
             ZoomOut = new DelegateCommand(() => {
-                if (zoomFactor * 1.25 <= 4) ZoomFactor = zoomFactor * 1.25;
-                else ZoomFactor = 4;
+                if (zoomFactor * 0.75 >= 0.125) ZoomFactor = zoomFactor * 0.75;
+                else ZoomFactor = 0.125;
             });
         }
 

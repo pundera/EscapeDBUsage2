@@ -57,7 +57,7 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0" Orientation="Horizontal">
-            <GroupBox Header=" Fulltext [INCLUDE]">
+            <GroupBox Header=" Fulltext [INCLUDE] ">
                 <StackPanel Orientation="Horizontal">
                     <StackPanel Orientation="Vertical">
                         <StackPanel Orientation="Horizontal">
@@ -69,15 +69,14 @@
                             <TextBox Margin="6,4" Width="100" Text="{Binding ViewModel.SchemaColumnFulltext, Delay=300, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                         </StackPanel>
                     </StackPanel>
-                    <Button Margin="0,36,0,2" Command="{Binding ViewModel.EraseSchemaFulltext}" Background="Transparent" >
+                    <Button Width="30" Margin="0,36,0,2" Command="{Binding ViewModel.EraseSchemaFulltext}" Background="Transparent" >
                         <StackPanel Orientation="Horizontal">
-                            <Label Content="Erase" />
                             <Image Height="24" Source="/EscapeDBUsage;component/Images/erase.png" />
                         </StackPanel>
                     </Button>
                 </StackPanel>
             </GroupBox>
-            <GroupBox Header=" Fulltext [EXCLUDE]">
+            <GroupBox Header=" Fulltext [EXCLUDE] ">
                 <StackPanel Orientation="Horizontal">
                     <StackPanel Orientation="Vertical">
                         <StackPanel Orientation="Horizontal">
@@ -89,40 +88,61 @@
                             <TextBox Margin="6,4" Width="100" Text="{Binding ViewModel.SchemaColumnFulltextExclude, Delay=300, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                         </StackPanel>
                     </StackPanel>
-                    <Button Margin="0,36,0,2" Command="{Binding ViewModel.EraseSchemaFulltextExclude}" Background="Transparent" >
+                    <Button Width="30" Margin="0,36,0,2" Command="{Binding ViewModel.EraseSchemaFulltextExclude}" Background="Transparent" >
                         <StackPanel Orientation="Horizontal">
-                            <Label Content="Erase" />
                             <Image Height="24" Source="/EscapeDBUsage;component/Images/erase.png" />
                         </StackPanel>
                     </Button>
                 </StackPanel>
             </GroupBox>
-            <GroupBox Header=" Tree View ">
+
+            <!-- FILTERs -->
+            <GroupBox>
+                <GroupBox.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Padding="0" Content=" Filters [COLUMNs]"/>
+                        <CheckBox Margin="4,2,4,0" IsChecked="{Binding ViewModel.HasFilters, UpdateSourceTrigger=PropertyChanged}"/>
+                    </StackPanel>
+                    
+                </GroupBox.Header>
+                <StackPanel Orientation="Vertical">
+                    <StackPanel Orientation="Vertical">
+                        <CheckBox IsThreeState="True" IsChecked="{Binding ViewModel.IsPrimaryKeyFilter, UpdateSourceTrigger=PropertyChanged}" Content="is Primary Key"/>
+                        <CheckBox IsThreeState="True" IsChecked="{Binding ViewModel.IsNullableFilter, UpdateSourceTrigger=PropertyChanged}" Content="is Nullable"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical">
+                        <CheckBox IsThreeState="True" IsChecked="{Binding ViewModel.IsComputedFilter, UpdateSourceTrigger=PropertyChanged}" Content="is Computed"/>
+                        <CheckBox IsThreeState="True" IsChecked="{Binding ViewModel.HasDefaultFilter, UpdateSourceTrigger=PropertyChanged}" Content="has Default"/>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox Header=" Tree View [ALL nodes] ">
                 <StackPanel Orientation="Vertical">
                     <StackPanel Orientation="Horizontal">
-                        <Button Width="100" Margin="2,2" Command="{Binding ViewModel.ExpandAll}" Background="Transparent" >
+                        <Button Width="80" Margin="2,2" Command="{Binding ViewModel.ExpandAll}" Background="Transparent" >
                             <StackPanel Orientation="Horizontal">
-                                <Label Content="Expand All"/>
+                                <Label Content="Expand"/>
                                 <Image Height="16" Width="16" Source="/EscapeDBUsage;component/Images/db-structure-expand-all.png" Stretch="Fill"/>
                             </StackPanel>
                         </Button>
-                        <Button Width="100" Margin="2,2" Command="{Binding ViewModel.CollapseAll}" Background="Transparent" >
+                        <Button Width="80" Margin="2,2" Command="{Binding ViewModel.CollapseAll}" Background="Transparent" >
                             <StackPanel Orientation="Horizontal">
-                                <Label Content="Collapse All"/>
+                                <Label Content="Collapse"/>
                                 <Image Height="16" Width="16" Source="/EscapeDBUsage;component/Images/db-structure-collapse-all.png" Stretch="Fill"/>
                             </StackPanel>
                         </Button>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <Button Width="100" Margin="2,2" Command="{Binding ViewModel.CheckAll}" Background="Transparent" >
+                        <Button Width="80" Margin="2,2" Command="{Binding ViewModel.CheckAll}" Background="Transparent" >
                             <StackPanel Orientation="Horizontal">
-                                <Label Content="Check All"/>
+                                <Label Content="Check"/>
                                 <Image Height="16" Width="16" Source="/EscapeDBUsage;component/Images/check-all.png" Stretch="Fill"/>
                             </StackPanel>
                         </Button>
-                        <Button Width="100" Margin="2,2" Command="{Binding ViewModel.UncheckAll}" Background="Transparent" >
+                        <Button Width="80" Margin="2,2" Command="{Binding ViewModel.UncheckAll}" Background="Transparent" >
                             <StackPanel Orientation="Horizontal">
-                                <Label Content="Uncheck All"/>
+                                <Label Content="Uncheck"/>
                                 <Image Height="16" Width="16" Source="/EscapeDBUsage;component/Images/uncheck-all.png" Stretch="Fill"/>
                             </StackPanel>
                         </Button>
@@ -133,16 +153,10 @@
                 <StackPanel Orientation="Vertical">
                     <!-- This Slider controls the zoom level -->
                     <StackPanel Orientation="Horizontal">
-                        <Slider Width="210"  Margin="2,6,2,10" Orientation="Horizontal" Minimum="0.25" Maximum="4.0" LargeChange="0.25" SmallChange="0.1"  Value="{Binding ViewModel.ZoomFactor}" />
+                        <Slider Width="170"  Margin="2,6,2,10" Orientation="Horizontal" Minimum="0.25" Maximum="4.0" LargeChange="0.25" SmallChange="0.1"  Value="{Binding ViewModel.ZoomFactor}" />
                         <Label Width="40" Content="{Binding ViewModel.ZoomFactor, Converter={StaticResource PercentageConverter}}"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <Button Width="80" Margin="2,2" Command="{Binding ViewModel.ZoomDefault}" Background="Transparent">
-                            <StackPanel Orientation="Horizontal">
-                                <Label Content="Default"/>
-                                <Image Width="16" Height="16" Source="/EscapeDBUsage;component/Images/erase.png" />
-                            </StackPanel>
-                        </Button>
                         <Button Width="80" Margin="2,2" Command="{Binding ViewModel.ZoomIn}" Background="Transparent">
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Zoom In"/>
@@ -153,6 +167,11 @@
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Zoom Out"/>
                                 <Image Width="16" Height="16" Source="/EscapeDBUsage;component/Images/zoom-out.png" />
+                            </StackPanel>
+                        </Button>
+                        <Button Width="30" Margin="2,2" Command="{Binding ViewModel.ZoomDefault}" Background="Transparent">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Width="26" Height="24" Source="/EscapeDBUsage;component/Images/erase.png" />
                             </StackPanel>
                         </Button>
                     </StackPanel>
